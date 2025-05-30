@@ -14,8 +14,9 @@ export const Colors = {
         base: '#3D2C25'
     },
     background: {
-        dark: '#753E05',
         base: '#FFEEDF',
+        dark: '#753E05',
+        darkest: '#3D2C25',
     }
 };
 
@@ -30,10 +31,10 @@ export const FontWeidth: Record<string, TextStyle['fontWeight']> = {
 }
 
 export const FontSize = {
-    '2xl': 24,
-    xl: 20,
+    s: 12,
     m: 14,
-    s: 12
+    xl: 20,
+    '2xl': 24,
 }
 
 export const Spacing = {
@@ -43,4 +44,5 @@ export const Spacing = {
     l: 16,
     xl: 20,
     '2xl': 24,
+    '3xl': 36,
 }

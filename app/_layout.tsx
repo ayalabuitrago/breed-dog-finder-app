@@ -10,7 +10,7 @@ export default function RootLayout() {
     Outfit: require("../assets/fonts/Outfit.ttf"),
   });
 
-  const indexHeader = useCallback(() => <Navbar label="Breed Dog Finder" />, []);
+  const indexHeader = useCallback(() => <Navbar more />, []);
 
   if (!loaded) {
     // Async font loading only occurs in development.
@@ -22,7 +22,8 @@ export default function RootLayout() {
     <>
       <Stack>
         <Stack.Screen name="index" options={{
-          header: indexHeader
+          header: indexHeader,
+          headerTransparent: true,
         }} />
       </Stack>
       <StatusBar style="light" />
