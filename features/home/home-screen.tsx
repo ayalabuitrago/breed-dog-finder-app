@@ -5,12 +5,17 @@ import { useHeaderHeight } from "@react-navigation/elements";
 import { ImageBackground, View } from "react-native";
 import { homeScreenStyle } from "./styles/home-screen.styles";
 
-export function HomeScreen() {
+interface HomeScreenProps {
+  onLayout: () => void;
+}
+
+export function HomeScreen(props: Readonly<HomeScreenProps>) {
   const headerHeight = useHeaderHeight();
   return (
     <ImageBackground
       style={[homeScreenStyle.container, { paddingTop: headerHeight }]}
       source={require("@/assets/images/background.png")}
+      onLayout={props.onLayout}
     >
       <View style={homeScreenStyle.content}></View>
       <View style={homeScreenStyle.footer}>

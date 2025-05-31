@@ -1,5 +1,11 @@
 import { HomeScreen } from "@/features/home/home-screen";
+import * as SplashScreen from "expo-splash-screen";
+import { useCallback } from "react";
 
-export default function Home () {
-    return <HomeScreen />
+export default function Home() {
+  const onLayoutRootView = useCallback(() => {
+    SplashScreen.hide();
+  }, []);
+
+  return <HomeScreen onLayout={onLayoutRootView} />;
 }

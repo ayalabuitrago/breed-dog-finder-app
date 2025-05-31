@@ -1,44 +1,53 @@
 {
   "expo": {
-    "name": "breed-dog-finder",
-    "slug": "breed-dog-finder",
+    "name": "Breed Dog",
+    "slug": "breed-dog",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "breeddogfinder",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/icon-splash.png",
+      "imageWidth": 200,
+      "resizeMode": "contain",
+      "backgroundColor": "#753E05"
+    },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.jaayalalafise.breeddogfinder"
+      "bundleIdentifier": "com.jaayalalafise.breeddogfinder",
+      "appleTeamId": "ZJAD2N25T4"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/icon-transparent.png",
+        "backgroundColor": "#753E05"
       },
       "edgeToEdgeEnabled": true,
       "package": "com.jaayalalafise.breeddogfinder"
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/icon-splash.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#753E05"
         }
       ]
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "3da99142-9a99-4427-b258-907ee41ccfee"
+      }
+    },
+    "owner": "ayalabuitrago"
   }
 }

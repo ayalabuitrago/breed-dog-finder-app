@@ -1,30 +1,59 @@
 import { Navbar } from "@/components/navbar";
-import { useFonts } from "expo-font";
+import * as Font from "expo-font";
 import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "react-native-reanimated";
 
+SplashScreen.preventAutoHideAsync();
+
+SplashScreen.setOptions({
+  duration: 300,
+  fade: true,
+});
+
 export default function RootLayout() {
-  const [loaded] = useFonts({
-    Outfit: require("../assets/fonts/Outfit.ttf"),
-  });
+  const [appIsReady, setAppIsReady] = useState(false);
 
   const indexHeader = useCallback(() => <Navbar more />, []);
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
+  useEffect(() => {
+    async function prepare() {
+      try {
+        // Pre-load fonts
+        const fonts = Font.loadAsync({
+          Outfit: require("../assets/fonts/Outfit.ttf"),
+        });
+        // Artificially delay for two seconds
+        const fake = new Promise((resolve) => setTimeout(resolve, 2000));
+
+        await Promise.all([fonts, fake]);
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        // Tell the application to render
+        setAppIsReady(true);
+      }
+    }
+
+    prepare();
+  }, []);
+
+  if (!appIsReady) {
     return null;
   }
-
 
   return (
     <>
       <Stack>
-        <Stack.Screen name="index" options={{
-          header: indexHeader,
-          headerTransparent: true,
-        }} />
+        <Stack.Screen
+          name="index"
+          options={{
+            header: indexHeader,
+            headerTransparent: true,
+          }}
+        />
       </Stack>
       <StatusBar style="light" />
     </>
