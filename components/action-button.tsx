@@ -8,16 +8,17 @@ interface ActionButtonProps {
   size?: "md" | "lg";
   label?: string;
   icon?: FC<SvgProps>;
+  onPress?: () => void;
 }
 
 export function ActionButton(props: Readonly<ActionButtonProps>) {
-  const { size = "md", label = "", icon: Icon } = props;
+  const { size = "md", label = "", icon: Icon,  onPress } = props;
 
   const circleStyles = size === "md" ? styles.circleMd : styles.circleLg;
   const iconStyles = size === "md" ? styles.iconMd : styles.iconLg;
 
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={[styles.baseCircle, circleStyles]}>
         {Icon && (
           <Icon width={iconStyles.width} height={iconStyles.height} />

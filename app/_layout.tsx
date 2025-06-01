@@ -51,7 +51,6 @@ export default function RootLayout() {
           name="index"
           options={{
             header: indexHeader,
-            headerTransparent: true,
           }}
         />
       </Stack>

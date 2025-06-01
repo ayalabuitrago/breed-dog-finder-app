@@ -1,4 +1,5 @@
 import { Colors, FontFamily, FontSize, FontWeidth } from "@/constants/tokens";
+import { ReactNode } from "react";
 import { Text, type TextStyle } from "react-native";
 
 interface LabelProps {
@@ -6,7 +7,7 @@ interface LabelProps {
   color?: keyof typeof Colors.text;
   weidth?: keyof typeof FontWeidth;
   style?: TextStyle,
-  children: string;
+  children: string | ReactNode;
 }
 
 export function Label(props: Readonly<LabelProps>) {

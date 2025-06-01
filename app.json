@@ -37,6 +37,14 @@
           "resizeMode": "contain",
           "backgroundColor": "#753E05"
         }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Permitir $(PRODUCT_NAME) para acceder a la camara",
+          "microphonePermission": "Permitir $(PRODUCT_NAME) para acceder al micrófono",
+          "recordAudioAndroid": true
+        }
       ]
     ],
     "experiments": {
