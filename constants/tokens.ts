@@ -46,3 +46,9 @@ export const Spacing = {
     '2xl': 24,
     '3xl': 36,
 }
+
+export const Radius = {
+    l: 20,
+    xl: 24,
+    '2xl': 28,
+}

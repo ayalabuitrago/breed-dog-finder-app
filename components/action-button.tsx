@@ -52,6 +52,8 @@ const styles = StyleSheet.create({
     borderRadius: 42,
     borderWidth: 4,
     marginBottom: Spacing.s,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   iconMd: {
     height: 62,
