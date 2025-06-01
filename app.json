@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Breed Dog",
-    "slug": "breed-dog",
+    "name": "Breed Dog Finder",
+    "slug": "breed-dog-finder",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
