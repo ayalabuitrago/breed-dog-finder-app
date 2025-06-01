@@ -45,6 +45,12 @@
           "microphonePermission": "Permitir $(PRODUCT_NAME) para acceder al micrófono",
           "recordAudioAndroid": true
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Permitir $(PRODUCT_NAME) para acceder a Fotos"
+        }
       ]
     ],
     "experiments": {

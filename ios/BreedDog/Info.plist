@@ -49,6 +49,8 @@
     <string>Permitir $(PRODUCT_NAME) para acceder a la camara</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>Permitir $(PRODUCT_NAME) para acceder al micrófono</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>The app accesses your photos to let you share them with your friends.</string>
     <key>NSUserActivityTypes</key>
     <array>
       <string>$(PRODUCT_BUNDLE_IDENTIFIER).expo.index_route</string>

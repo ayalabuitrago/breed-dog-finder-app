@@ -6,6 +6,7 @@ import { ActionButton } from "@/components/action-button";
 import { PopUpMessage } from "@/components/popup-message";
 import { usePredict } from "@/domain/hooks/predict";
 import { CameraView, useCameraPermissions } from "expo-camera";
+import * as ImagePicker from "expo-image-picker";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Image, ImageBackground, View } from "react-native";
 import Animated, {
@@ -24,9 +25,7 @@ interface HomeScreenProps {
 export function HomeScreen(props: Readonly<HomeScreenProps>) {
   const [cameraPermission, requestCameraPermission] = useCameraPermissions();
   const [photoUri, setPhotoUri] = useState<string | null>(null);
-  const { predictMutation } = usePredict();
-
-  const [predictResult, setPredictResult] = useState("");
+  const { requestPredict, predictResult, resetPredict } = usePredict();
 
   const scale = useSharedValue(1);
   const top = useSharedValue(0);
@@ -42,23 +41,17 @@ export function HomeScreen(props: Readonly<HomeScreenProps>) {
     requestCameraPermission();
   }, [requestCameraPermission]);
 
-  /**
-   * request camera and photo
-   */
-  const resetCamera = useCallback(async () => {
+  const retry = useCallback(async () => {
     setPhotoUri(null);
-    setPredictResult("");
+    resetPredict();
     scale.value = withTiming(1, {
       duration: 300,
     });
     top.value = withTiming(0, {
       duration: 300,
     });
-  }, [scale, top]);
+  }, [resetPredict, scale, top]);
 
-  /**
-   *
-   */
   const showPreviewPhoto = useCallback(
     (params: { uri: string }) => {
       setPhotoUri(params.uri);
@@ -72,38 +65,42 @@ export function HomeScreen(props: Readonly<HomeScreenProps>) {
     [scale, top]
   );
 
-  /**
-   * Take photo and make request
-   */
   const takePhoto = useCallback(async () => {
-    try {
-      if (!camera.current) return;
+    if (!camera.current) return;
 
-      // take picture
-      const picture = await camera.current.takePictureAsync({
-        base64: true,
-        shutterSound: true,
-        quality: 1,
-      });
+    const picture = await camera.current.takePictureAsync({
+      base64: true,
+      shutterSound: true,
+      quality: 1,
+    });
 
-      if (!picture.base64) return;
+    if (!picture.base64) return;
 
-      // photo preview
-      showPreviewPhoto({
-        uri: picture.uri,
-      });
+    showPreviewPhoto({
+      uri: picture.uri,
+    });
 
-      // API Request
-      const res = await predictMutation.mutateAsync({
-        base64: picture.base64,
-      });
+    requestPredict(picture.base64);
+  }, [requestPredict, showPreviewPhoto]);
 
-      // Show result
-      console.log(JSON.stringify(res, null, 3));
-    } catch (error) {
-      setPredictResult((error as Error)?.message ?? "");
-    }
-  }, [predictMutation, showPreviewPhoto]);
+  const pickImage = useCallback(async () => {
+    const pictures = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      allowsEditing: true,
+      quality: 1,
+      base64: true,
+    });
+
+    const picture = pictures.assets?.at(0);
+
+    if (!picture?.base64) return;
+
+    showPreviewPhoto({
+      uri: picture.uri,
+    });
+
+    requestPredict(picture.base64);
+  }, [requestPredict, showPreviewPhoto]);
 
   return (
     <ImageBackground
@@ -134,13 +131,17 @@ export function HomeScreen(props: Readonly<HomeScreenProps>) {
       </View>
       <View style={homeScreenStyle.footer}>
         {!!photoUri && (
-          <ActionButton size="lg" onPress={resetCamera} icon={RefreshIcon} />
+          <ActionButton size="lg" onPress={retry} icon={RefreshIcon} />
         )}
         {!photoUri && (
           <>
             <ActionButton label="Historial" icon={HistoryIcon} />
             <ActionButton size="lg" onPress={takePhoto} />
-            <ActionButton label="Importar" icon={GalleryIcon} />
+            <ActionButton
+              label="Importar"
+              icon={GalleryIcon}
+              onPress={pickImage}
+            />
           </>
         )}
       </View>
