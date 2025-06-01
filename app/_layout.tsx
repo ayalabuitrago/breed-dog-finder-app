@@ -1,4 +1,8 @@
 import { Navbar } from "@/components/navbar";
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 import * as Font from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -12,6 +16,8 @@ SplashScreen.setOptions({
   duration: 300,
   fade: true,
 });
+
+const queryClient = new QueryClient();
 
 export default function RootLayout() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -45,7 +51,7 @@ export default function RootLayout() {
   }
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <Stack>
         <Stack.Screen
           name="index"
@@ -55,6 +61,6 @@ export default function RootLayout() {
         />
       </Stack>
       <StatusBar style="light" />
-    </>
+    </QueryClientProvider>
   );
 }

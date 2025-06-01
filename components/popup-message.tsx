@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background.dark,
     position: "relative",
     paddingHorizontal: Spacing.m,
-    paddingVertical: Spacing.l,
+    paddingVertical: Spacing.m,
     borderTopEndRadius: Radius.l,
     borderTopRightRadius: Radius.l,
     borderBottomEndRadius: Radius.l,

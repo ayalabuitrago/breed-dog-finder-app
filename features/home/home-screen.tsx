@@ -4,6 +4,7 @@ import HistoryIcon from "@/assets/icons/history.svg";
 import RefreshIcon from "@/assets/icons/refresh.svg";
 import { ActionButton } from "@/components/action-button";
 import { PopUpMessage } from "@/components/popup-message";
+import { usePredict } from "@/domain/hooks/predict";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Image, ImageBackground, View } from "react-native";
@@ -23,9 +24,17 @@ interface HomeScreenProps {
 export function HomeScreen(props: Readonly<HomeScreenProps>) {
   const [cameraPermission, requestCameraPermission] = useCameraPermissions();
   const [photoUri, setPhotoUri] = useState<string | null>(null);
+  const { predictMutation } = usePredict();
+
+  const [predictResult, setPredictResult] = useState("");
 
   const scale = useSharedValue(1);
   const top = useSharedValue(0);
+
+  const animatedStyles = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+    top: top.value,
+  }));
 
   const camera = useRef<CameraView>(null);
 
@@ -33,8 +42,12 @@ export function HomeScreen(props: Readonly<HomeScreenProps>) {
     requestCameraPermission();
   }, [requestCameraPermission]);
 
+  /**
+   * request camera and photo
+   */
   const resetCamera = useCallback(async () => {
     setPhotoUri(null);
+    setPredictResult("");
     scale.value = withTiming(1, {
       duration: 300,
     });
@@ -43,6 +56,9 @@ export function HomeScreen(props: Readonly<HomeScreenProps>) {
     });
   }, [scale, top]);
 
+  /**
+   *
+   */
   const showPreviewPhoto = useCallback(
     (params: { uri: string }) => {
       setPhotoUri(params.uri);
@@ -56,26 +72,38 @@ export function HomeScreen(props: Readonly<HomeScreenProps>) {
     [scale, top]
   );
 
-  const animatedStyles = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-    top: top.value,
-  }));
-
+  /**
+   * Take photo and make request
+   */
   const takePhoto = useCallback(async () => {
-    if (!camera.current) return;
+    try {
+      if (!camera.current) return;
 
-    // take picture
-    const picture = await camera.current.takePictureAsync({
-      base64: true,
-      shutterSound: true,
-      quality: 1,
-    });
+      // take picture
+      const picture = await camera.current.takePictureAsync({
+        base64: true,
+        shutterSound: true,
+        quality: 1,
+      });
 
-    // photo preview
-    showPreviewPhoto({
-      uri: picture.uri,
-    });
-  }, [showPreviewPhoto]);
+      if (!picture.base64) return;
+
+      // photo preview
+      showPreviewPhoto({
+        uri: picture.uri,
+      });
+
+      // API Request
+      const res = await predictMutation.mutateAsync({
+        base64: picture.base64,
+      });
+
+      // Show result
+      console.log(JSON.stringify(res, null, 3));
+    } catch (error) {
+      setPredictResult((error as Error)?.message ?? "");
+    }
+  }, [predictMutation, showPreviewPhoto]);
 
   return (
     <ImageBackground
@@ -94,16 +122,13 @@ export function HomeScreen(props: Readonly<HomeScreenProps>) {
             <CameraView ref={camera} style={homeScreenStyle.camera} />
           )}
         </Animated.View>
-        {!!photoUri && (
+        {!!photoUri && !!predictResult && (
           <Animated.View
             entering={FadeIn.duration(300)}
             exiting={FadeOut.duration(300)}
             style={homeScreenStyle.messageContainer}
           >
-            <PopUpMessage
-              avatar={BdfIcon}
-              message={`La raza de tu mascota es “**Chaw Chaw**”\n##% de Precisión`}
-            />
+            <PopUpMessage avatar={BdfIcon} message={predictResult} />
           </Animated.View>
         )}
       </View>
