@@ -2,6 +2,7 @@ import BackIcon from "@/assets/icons/arrow-left.svg";
 import HeaderIcon from "@/assets/icons/icon.svg";
 import MoreIcon from "@/assets/icons/more.svg";
 import { Colors, Spacing } from "@/constants/tokens";
+import { useRouter } from "expo-router";
 import { Pressable, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Label } from "./label";
@@ -14,11 +15,13 @@ interface NavbarProps {
 
 export function Navbar(props: Readonly<NavbarProps>) {
   const { back, more, moreAction } = props;
+  const router = useRouter();
+
   return (
     <View style={styles.mainContainer}>
       <SafeAreaView edges={["top"]}>
         <View style={styles.container}>
-          <Pressable style={styles.button}>{back && <BackIcon />}</Pressable>
+          <Pressable style={styles.button}  onPress={() => router.back()}>{back && <BackIcon />}</Pressable>
           <View style={styles.headerContainer}>
             <HeaderIcon />
             <Label color="light" size="2xl" weidth="bold" style={styles.text}>

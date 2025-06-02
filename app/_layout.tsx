@@ -23,6 +23,7 @@ export default function RootLayout() {
   const [appIsReady, setAppIsReady] = useState(false);
 
   const indexHeader = useCallback(() => <Navbar more />, []);
+  const historyHeader = useCallback(() => <Navbar more />, [])
 
   useEffect(() => {
     async function prepare() {
@@ -57,6 +58,12 @@ export default function RootLayout() {
           name="index"
           options={{
             header: indexHeader,
+          }}
+        />
+        <Stack.Screen
+          name="history"
+          options={{
+            header: historyHeader,
           }}
         />
       </Stack>

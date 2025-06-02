@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing["2xl"],
   },
   baseCircle: {
-    backgroundColor: Colors.background.base,
+    backgroundColor: Colors.background.light,
     borderColor: Colors.primary.base,
   },
   circleMd: {
