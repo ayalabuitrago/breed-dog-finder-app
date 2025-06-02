@@ -1,16 +1,15 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect } from "react";
 import {
-    DimensionValue,
-    FlexStyle,
-    View,
+  DimensionValue,
+  View,
 } from "react-native";
 import Animated, {
-    Easing,
-    useAnimatedStyle,
-    useSharedValue,
-    withRepeat,
-    withTiming,
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
 } from "react-native-reanimated";
 
 interface SkeletonProps {
@@ -18,13 +17,6 @@ interface SkeletonProps {
   width: DimensionValue;
   radius: number;
   backgroundColor?: string;
-  opacity?: number;
-  paddingHorizontal?: number;
-  paddingVertical?: number;
-  marginTop?: number;
-  marginBottom?: number;
-  alignSelf?: FlexStyle["alignSelf"];
-  justifyContent?: FlexStyle["justifyContent"];
 }
 
 const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
@@ -35,13 +27,6 @@ export default function Skeleton(props: Readonly<SkeletonProps>) {
     width,
     radius,
     backgroundColor = '#FFFFFF' + '20',
-    opacity,
-    paddingHorizontal,
-    paddingVertical,
-    marginTop,
-    marginBottom,
-    alignSelf,
-    justifyContent,
   } = props;
 
   const translateX = useSharedValue(-400);
@@ -69,13 +54,6 @@ export default function Skeleton(props: Readonly<SkeletonProps>) {
         backgroundColor,
         borderRadius: radius,
         overflow: "hidden",
-        opacity,
-        paddingHorizontal,
-        paddingVertical,
-        marginTop,
-        marginBottom,
-        alignSelf,
-        justifyContent,
       }}
     >
       <AnimatedLinearGradient
