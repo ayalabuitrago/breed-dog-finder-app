@@ -32,4 +32,5 @@ En el output verás varias opciones para ejecutar la app, selecciona la que pref
    ```bash
    npx expo start
    ```
-3. Aparecerá un código QR en la terminal, escanealo con Expo Go y listo.
+3. Asegurate que tu PC y tu dispostivo móvil estén conectados a la misma red wifi
+4. Aparecerá un código QR en la terminal, escanealo con Expo Go y listo.
