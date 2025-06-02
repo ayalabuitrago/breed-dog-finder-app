@@ -3,14 +3,16 @@ import { FC } from "react";
 import { StyleSheet, View } from "react-native";
 import Svg, { Path, SvgProps } from "react-native-svg";
 import { MarkdownText } from "./ markdown";
+import Skeleton from "./skeleton";
 
 interface PopUpMessageProps {
   avatar: FC<SvgProps>;
   message: string;
+  loading?: boolean,
 }
 
 export function PopUpMessage(props: Readonly<PopUpMessageProps>) {
-  const { avatar: Avatar, message } = props;
+  const { avatar: Avatar, message, loading } = props;
 
   return (
     <View style={styles.container}>
@@ -21,7 +23,17 @@ export function PopUpMessage(props: Readonly<PopUpMessageProps>) {
             <Path d="M0 0 C10 20, 10 20, 20 0" fill="#753E05" />
           </Svg>
         </View>
-        <MarkdownText color="light">{message}</MarkdownText>
+        {
+          loading ?
+          <View style={styles.skeleton}>
+            <Skeleton height={14} width={'100%'} radius={12} />
+            <Skeleton height={14} width={'70%'} radius={12} />
+            <Skeleton height={14} width={'80%'} radius={12} />
+          </View>
+          :
+          <MarkdownText color="light">{message}</MarkdownText>
+
+        }
       </View>
     </View>
   );
@@ -57,4 +69,8 @@ const styles = StyleSheet.create({
     top: 0,
     left: -5,
   },
+  skeleton: {
+    flexDirection: 'column',
+    gap: Spacing.s,
+  }
 });

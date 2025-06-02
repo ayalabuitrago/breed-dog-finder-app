@@ -5,8 +5,10 @@ import RefreshIcon from "@/assets/icons/refresh.svg";
 import { ActionButton } from "@/components/action-button";
 import { PopUpMessage } from "@/components/popup-message";
 import { usePredict } from "@/domain/hooks/predict";
+import { resizeImage } from "@/utils/image";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
+import { Link } from "expo-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Image, ImageBackground, View } from "react-native";
 import Animated, {
@@ -25,7 +27,8 @@ interface HomeScreenProps {
 export function HomeScreen(props: Readonly<HomeScreenProps>) {
   const [cameraPermission, requestCameraPermission] = useCameraPermissions();
   const [photoUri, setPhotoUri] = useState<string | null>(null);
-  const { requestPredict, predictResult, resetPredict } = usePredict();
+  const [processing, setProcessing] = useState(false);
+  const { predict, resetPredict, predictResult } = usePredict();
 
   const scale = useSharedValue(1);
   const top = useSharedValue(0);
@@ -68,6 +71,8 @@ export function HomeScreen(props: Readonly<HomeScreenProps>) {
   const takePhoto = useCallback(async () => {
     if (!camera.current) return;
 
+    setProcessing(true);
+
     const picture = await camera.current.takePictureAsync({
       base64: true,
       shutterSound: true,
@@ -80,10 +85,21 @@ export function HomeScreen(props: Readonly<HomeScreenProps>) {
       uri: picture.uri,
     });
 
-    requestPredict(picture.base64);
-  }, [requestPredict, showPreviewPhoto]);
+    const resized = await resizeImage({
+      uri: picture.uri,
+      height: picture.height,
+      width: picture.width,
+      factor: 4,
+    });
+
+    await predict(resized.base64 ?? "");
+
+    setProcessing(false);
+  }, [predict, showPreviewPhoto]);
 
   const pickImage = useCallback(async () => {
+    setProcessing(false);
+
     const pictures = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
       allowsEditing: true,
@@ -99,8 +115,17 @@ export function HomeScreen(props: Readonly<HomeScreenProps>) {
       uri: picture.uri,
     });
 
-    requestPredict(picture.base64);
-  }, [requestPredict, showPreviewPhoto]);
+    const resized = await resizeImage({
+      uri: picture.uri,
+      height: picture.height,
+      width: picture.width,
+      factor: 4,
+    });
+
+    await predict(resized.base64 ?? "");
+
+    setProcessing(false);
+  }, [predict, showPreviewPhoto]);
 
   return (
     <ImageBackground
@@ -119,13 +144,13 @@ export function HomeScreen(props: Readonly<HomeScreenProps>) {
             <CameraView ref={camera} style={homeScreenStyle.camera} />
           )}
         </Animated.View>
-        {!!photoUri && !!predictResult && (
+        {!!photoUri && (
           <Animated.View
             entering={FadeIn.duration(300)}
             exiting={FadeOut.duration(300)}
             style={homeScreenStyle.messageContainer}
           >
-            <PopUpMessage avatar={BdfIcon} message={predictResult} />
+            <PopUpMessage avatar={BdfIcon} message={predictResult} loading={processing} />
           </Animated.View>
         )}
       </View>
@@ -135,7 +160,9 @@ export function HomeScreen(props: Readonly<HomeScreenProps>) {
         )}
         {!photoUri && (
           <>
-            <ActionButton label="Historial" icon={HistoryIcon} />
+            <Link href={"/history"} asChild>
+              <ActionButton label="Historial" icon={HistoryIcon} />
+            </Link>
             <ActionButton size="lg" onPress={takePhoto} />
             <ActionButton
               label="Importar"

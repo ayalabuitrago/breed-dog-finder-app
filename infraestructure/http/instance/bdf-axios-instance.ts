@@ -39,7 +39,7 @@ axiosInstance.interceptors.response.use(
             return Promise.reject(new Error('Tiempo de espera agotado. Verifica tu conexión a internet'))
         }
 
-        return Promise.reject(new Error(error.message || 'Error inesperado'))
+        return Promise.reject(new Error('Error inesperado'))
     }
 )
 

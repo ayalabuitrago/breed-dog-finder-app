@@ -27,7 +27,7 @@ export const homeScreenStyle = StyleSheet.create({
     cameraContainer: {
         width: '100%',
         height: '100%',
-        backgroundColor: Colors.background.base,
+        backgroundColor: Colors.background.light,
         borderRadius: Radius.xl,
         overflow: 'hidden',
         position: 'absolute',

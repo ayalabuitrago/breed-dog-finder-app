@@ -4,7 +4,6 @@ import { useCallback, useState } from "react";
 
 export const usePredict = () => {
     const [predictResult, setPredictResult] = useState("");
-    const [processing, setProcessing] = useState(false);
 
     const predictMutation = useMutation({
         mutationKey: ['predict'],
@@ -15,9 +14,8 @@ export const usePredict = () => {
         setPredictResult("");
     }
 
-    const requestPredict = useCallback(async (base64: string) => {
+    const predict = useCallback(async (base64: string) => {
         try {
-            setProcessing(true);
             const res = await predictMutation.mutateAsync({
                 base64,
             });
@@ -28,9 +26,7 @@ export const usePredict = () => {
                 );
             } else {
                 const breedDog = res.breed_dog
-                    .split("_")
-                    .map((word) => word[0].toUpperCase() + word.slice(1))
-                    .join(" ");
+                    .replaceAll("_", " ")
                 setPredictResult(
                     `La raza de tu mascota es “**${breedDog}**”\n${res.accuracy}% de Precisión`
                 );
@@ -41,16 +37,12 @@ export const usePredict = () => {
                 (error as Error)?.message ?? "Ocurrió un error inesperado"
             );
         }
-        finally {
-            setProcessing(false);
-        }
 
     }, [predictMutation]);
 
     return {
         predictResult,
         resetPredict,
-        requestPredict,
-        processing,
+        predict,
     }
 }
