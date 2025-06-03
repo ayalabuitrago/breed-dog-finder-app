@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/navbar";
+import { Navbar } from "@/features/components/navbar";
 import {
   QueryClient,
   QueryClientProvider,

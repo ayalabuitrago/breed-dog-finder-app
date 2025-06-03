@@ -1,4 +1,4 @@
-import { Colors, Spacing } from "@/constants/tokens";
+import { Colors, Spacing } from "@/features/constants/tokens";
 import { StyleSheet } from "react-native";
 
 export const historyScreenStyles = StyleSheet.create({

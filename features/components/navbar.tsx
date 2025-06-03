@@ -1,7 +1,7 @@
 import BackIcon from "@/assets/icons/arrow-left.svg";
 import HeaderIcon from "@/assets/icons/icon.svg";
 import MoreIcon from "@/assets/icons/more.svg";
-import { Colors, Spacing } from "@/constants/tokens";
+import { Colors, Spacing } from "@/features/constants/tokens";
 import { useRouter } from "expo-router";
 import { Pressable, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";

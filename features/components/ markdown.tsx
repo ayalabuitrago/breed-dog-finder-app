@@ -1,4 +1,4 @@
-import { Colors, FontSize } from "@/constants/tokens";
+import { Colors, FontSize } from "@/features/constants/tokens";
 import React, { useMemo } from "react";
 import { Label } from "./label";
 

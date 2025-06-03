@@ -1,4 +1,4 @@
-import { Colors, Radius, Spacing } from "@/constants/tokens";
+import { Colors, Radius, Spacing } from "@/features/constants/tokens";
 import { Image, StyleSheet, View } from "react-native";
 import { Label } from "./label";
 

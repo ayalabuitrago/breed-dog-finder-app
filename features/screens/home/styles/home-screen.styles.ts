@@ -1,4 +1,4 @@
-import { Colors, Radius, Spacing } from "@/constants/tokens";
+import { Colors, Radius, Spacing } from "@/features/constants/tokens";
 import { StyleSheet } from "react-native";
 
 export const homeScreenStyle = StyleSheet.create({

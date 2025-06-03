@@ -1,4 +1,4 @@
-import { Colors, Radius, Spacing } from "@/constants/tokens";
+import { Colors, Radius, Spacing } from "@/features/constants/tokens";
 import { FC } from "react";
 import { StyleSheet, View } from "react-native";
 import Svg, { Path, SvgProps } from "react-native-svg";

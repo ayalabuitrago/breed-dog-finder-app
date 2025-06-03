@@ -1,10 +1,10 @@
 import FootprintIcon from "@/assets/icons/footprint.svg";
-import { ActionButton } from "@/components/action-button";
-import { Label } from "@/components/label";
-import { ListItem } from "@/components/list-item";
 import { useHistory } from "@/domain/hooks/use-history";
 import { getTimeElapsed } from "@/domain/utils/date";
-import { useScrollContentSize } from "@/hooks/use-scroll-content-size";
+import { ActionButton } from "@/features/components/action-button";
+import { Label } from "@/features/components/label";
+import { ListItem } from "@/features/components/list-item";
+import { useScrollContentSize } from "@/features/hooks/use-scroll-content-size";
 import { useRouter } from "expo-router";
 import { FlatList, ImageBackground, View } from "react-native";
 import { homeScreenStyle } from "../home/styles/home-screen.styles";

@@ -1,4 +1,4 @@
-import { Colors, FontFamily, FontSize, FontWeidth } from "@/constants/tokens";
+import { Colors, FontFamily, FontSize, FontWeidth } from "@/features/constants/tokens";
 import { ReactNode } from "react";
 import { Text, type TextStyle } from "react-native";
 
