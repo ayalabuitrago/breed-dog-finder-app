@@ -13,5 +13,16 @@ export const historyScreenStyles = StyleSheet.create({
     labelContainer: {
         backgroundColor: Colors.background.base,
         padding: Spacing.m
+    },
+    flatlist: {
+        flex: 1,
+        width: '100%',
+        paddingHorizontal: Spacing["2xl"],
+    },
+    flatlistContainer: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        gap: Spacing.m,
+        paddingBottom: Spacing["2xl"],
     }
 })
