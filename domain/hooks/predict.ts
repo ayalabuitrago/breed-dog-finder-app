@@ -1,4 +1,4 @@
-import { postPredict, PredictRequest } from "@/infraestructure/api/predict";
+import { postPredict, PredictRequest, PredictResponse } from "@/infraestructure/api/predict";
 import { useMutation } from "@tanstack/react-query";
 import { useCallback, useState } from "react";
 
@@ -10,11 +10,12 @@ export const usePredict = () => {
         mutationFn: (params: PredictRequest) => postPredict(params),
     });
 
+
     const resetPredict = () => {
         setPredictResult("");
     }
 
-    const predict = useCallback(async (base64: string) => {
+    const predict = useCallback(async (base64: string): Promise<PredictResponse | null> => {
         try {
             const res = await predictMutation.mutateAsync({
                 base64,
@@ -31,11 +32,14 @@ export const usePredict = () => {
                     `La raza de tu mascota es “**${breedDog}**”\n${res.accuracy}% de Precisión`
                 );
             }
+
+            return res;
         }
         catch (error) {
             setPredictResult(
                 (error as Error)?.message ?? "Ocurrió un error inesperado"
             );
+            return null;
         }
 
     }, [predictMutation]);

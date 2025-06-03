@@ -5,6 +5,7 @@ import RefreshIcon from "@/assets/icons/refresh.svg";
 import { ActionButton } from "@/components/action-button";
 import { PopUpMessage } from "@/components/popup-message";
 import { usePredict } from "@/domain/hooks/predict";
+import { useHistory } from "@/domain/hooks/use-history";
 import { resizeImage } from "@/utils/image";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
@@ -29,6 +30,7 @@ export function HomeScreen(props: Readonly<HomeScreenProps>) {
   const [photoUri, setPhotoUri] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
   const { predict, resetPredict, predictResult } = usePredict();
+  const { addHistory } = useHistory();
 
   const scale = useSharedValue(1);
   const top = useSharedValue(0);
@@ -92,10 +94,17 @@ export function HomeScreen(props: Readonly<HomeScreenProps>) {
       factor: 4,
     });
 
-    await predict(resized.base64 ?? "");
+    const predictRes = await predict(resized.base64 ?? "");
+
+    if (predictRes) {
+      addHistory({
+        ...predictRes,
+        temp_uri: resized.uri,
+      })
+    }
 
     setProcessing(false);
-  }, [predict, showPreviewPhoto]);
+  }, [predict, showPreviewPhoto, addHistory]);
 
   const pickImage = useCallback(async () => {
     setProcessing(false);
@@ -122,10 +131,17 @@ export function HomeScreen(props: Readonly<HomeScreenProps>) {
       factor: 4,
     });
 
-    await predict(resized.base64 ?? "");
+    const predictRes = await predict(resized.base64 ?? "");
+
+    if (predictRes) {
+      addHistory({
+        ...predictRes,
+        temp_uri: resized.uri,
+      })
+    }
 
     setProcessing(false);
-  }, [predict, showPreviewPhoto]);
+  }, [addHistory, predict, showPreviewPhoto]);
 
   return (
     <ImageBackground
