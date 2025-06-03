@@ -6,7 +6,6 @@ import { usePredict } from "@/domain/hooks/predict";
 import { useHistory } from "@/domain/hooks/use-history";
 import { ActionButton } from "@/features/components/action-button";
 import { PopUpMessage } from "@/features/components/popup-message";
-import { resizeImage } from "@/utils/image";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import { Link } from "expo-router";
@@ -19,19 +18,21 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { homeScreenStyle } from "./styles/home-screen.styles";
+import { homeScreenStyle } from "./styles";
 
 interface HomeScreenProps {
   onLayout: () => void;
 }
 
 export function HomeScreen(props: Readonly<HomeScreenProps>) {
-  const [cameraPermission, requestCameraPermission] = useCameraPermissions();
   const [photoUri, setPhotoUri] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
-  const { predict, resetPredict, predictResult } = usePredict();
+  const [cameraPermission, requestCameraPermission] = useCameraPermissions();
+  const { predictResult, predict, resetPredict } = usePredict();
   const { addHistory } = useHistory();
 
+  const camera = useRef<CameraView>(null);
+  
   const scale = useSharedValue(1);
   const top = useSharedValue(0);
 
@@ -40,7 +41,6 @@ export function HomeScreen(props: Readonly<HomeScreenProps>) {
     top: top.value,
   }));
 
-  const camera = useRef<CameraView>(null);
 
   useEffect(() => {
     requestCameraPermission();
@@ -87,20 +87,17 @@ export function HomeScreen(props: Readonly<HomeScreenProps>) {
       uri: picture.uri,
     });
 
-    const resized = await resizeImage({
+    const predictRes = await predict({
       uri: picture.uri,
       height: picture.height,
       width: picture.width,
-      factor: 4,
     });
-
-    const predictRes = await predict(resized.base64 ?? "");
 
     if (predictRes) {
       addHistory({
         ...predictRes,
-        temp_uri: resized.uri,
-      })
+        temp_uri: predictRes.image_uri,
+      });
     }
 
     setProcessing(false);
@@ -124,20 +121,17 @@ export function HomeScreen(props: Readonly<HomeScreenProps>) {
       uri: picture.uri,
     });
 
-    const resized = await resizeImage({
+    const predictRes = await predict({
       uri: picture.uri,
       height: picture.height,
       width: picture.width,
-      factor: 4,
     });
-
-    const predictRes = await predict(resized.base64 ?? "");
 
     if (predictRes) {
       addHistory({
         ...predictRes,
-        temp_uri: resized.uri,
-      })
+        temp_uri: predictRes.image_uri,
+      });
     }
 
     setProcessing(false);
@@ -166,7 +160,11 @@ export function HomeScreen(props: Readonly<HomeScreenProps>) {
             exiting={FadeOut.duration(300)}
             style={homeScreenStyle.messageContainer}
           >
-            <PopUpMessage avatar={BdfIcon} message={predictResult} loading={processing} />
+            <PopUpMessage
+              avatar={BdfIcon}
+              message={predictResult}
+              loading={processing}
+            />
           </Animated.View>
         )}
       </View>

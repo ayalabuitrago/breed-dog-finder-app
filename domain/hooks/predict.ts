@@ -1,6 +1,7 @@
 import { postPredict, PredictRequest, PredictResponse } from "@/infraestructure/api/predict";
 import { useMutation } from "@tanstack/react-query";
 import { useCallback, useState } from "react";
+import { resizeImage } from "../utils/image";
 
 export const usePredict = () => {
     const [predictResult, setPredictResult] = useState("");
@@ -15,8 +16,21 @@ export const usePredict = () => {
         setPredictResult("");
     }
 
-    const predict = useCallback(async (base64: string): Promise<PredictResponse | null> => {
+    const predict = useCallback(async (picture: {
+        uri: string,
+        height: number,
+        width: number,
+    }): Promise<PredictResponse & { image_uri: string } | null> => {
         try {
+            const { base64, uri } = await resizeImage({
+                uri: picture.uri,
+                height: picture.height,
+                width: picture.width,
+                factor: 4,
+            });
+
+            if (!base64) throw new Error('Ocurrión un error inesperado');
+
             const res = await predictMutation.mutateAsync({
                 base64,
             });
@@ -33,7 +47,10 @@ export const usePredict = () => {
                 );
             }
 
-            return res;
+            return {
+                ...res,
+                image_uri: uri
+            };
         }
         catch (error) {
             setPredictResult(

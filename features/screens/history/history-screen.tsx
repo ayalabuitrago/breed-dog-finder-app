@@ -7,7 +7,7 @@ import { ListItem } from "@/features/components/list-item";
 import { useScrollContentSize } from "@/features/hooks/use-scroll-content-size";
 import { useRouter } from "expo-router";
 import { FlatList, ImageBackground, View } from "react-native";
-import { homeScreenStyle } from "../home/styles/home-screen.styles";
+import { homeScreenStyle } from "../home/styles";
 import { historyScreenStyles } from "./styles";
 
 export function HistoryScreen() {
